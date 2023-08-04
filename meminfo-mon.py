@@ -1,10 +1,16 @@
 #!/bin/python3
 # -*- coding: utf-8 -*-
 #
+#  bufferwatch.py
+#  project
+#
+#  Created by Dolorosus on {2023-07-11.
+#  Copyright 2023. All rights reserved.
+#
+#  mail@dolorosus.de
 #
 #  shows continously selected values from /proc/meminfo
 #
-
 import curses
 from curses import A_BOLD, A_REVERSE, wrapper
 import locale
@@ -13,7 +19,6 @@ import socket
 import argparse
 
 from time import sleep
-
 
 
 def midstr(str, pos, repl):
@@ -75,13 +80,12 @@ def showMeminfo(selection, cnt, interval, stdscr):
         cnt -= 1
 
         meminfo = readMeminfo(selection, meminfo)
-
         #
         # compute length of bargraph and factor for stars
         bar.update({"upb": max(scrCols - 43, 1)})
         starFac = meminfo["MemTotal:"][0] // bar["upb"]
 
-        title = f"{hostname:<{nameLen}} {'meminfo monitor':^22}\t {cnt:>7}"
+        title = f"{'meminfo monitor':^22}\t {cnt:>7}"
         header = f"{'Name':<{nameLen}}{'kb':^{valLen}} {' '*bar['upb']} {'     HWM (kb)  ':>{valLen}}"
         dRow = 2  # datalines starts from dRow
         #
@@ -123,9 +127,10 @@ def showMeminfo(selection, cnt, interval, stdscr):
         if (scrRows > len(meminfo) + 3) and (scrCols >= 48):  # output fits on terminal
             #
             # build bars, hwm etc.
+            stdscr.addstr(0, 0,f"{hostname:<{nameLen}}",A_BOLD)
+            stdscr.addstr(0, 0+nameLen, title)
+            stdscr.addstr(1, 0, header, A_REVERSE)
             for name in meminfo:
-                stdscr.addstr(0, 0, title)
-                stdscr.addstr(1, 0, header, A_REVERSE)
                 #
                 #  meminfo {name:[value,highWaterMark]}
                 value, hwm = meminfo[name][0], meminfo[name][1]
@@ -317,5 +322,3 @@ if __name__ == "__main__":
     count, interval = parsearg()
 
     wrapper(main)
-
-
