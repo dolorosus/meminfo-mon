@@ -242,3 +242,4 @@ The cache is checked every 600 seconds for pages to be written, pages older than
 This also means that in the worst case data on the mass storage can be 1200 seconds (20 minutes) old. 
 
 File systems can have their own methods for triggering the operating system flusher, e.g. EXT3/4 implements its own mechanism for this.
+You can use the ```commit=xxx``` prmeter in /etc/fstab to specify the maximum time after which the file system is consistent.
