@@ -1,14 +1,6 @@
 #!/bin/python3
 # -*- coding: utf-8 -*-
 #
-#  bufferwatch.py
-#  project
-#
-#  Created by Dolorosus on {2023-07-11.
-#  Copyright 2023. All rights reserved.
-#
-#  mail@dolorosus.de
-#
 #  shows continously selected values from /proc/meminfo
 #
 import curses
