@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 #
 #  shows continously selected values from /proc/meminfo
-#  since globals are considered harmful, they are hidden hidden in the meminfoMon class ;-)
+#  since globals are considered harmful, they are hidden in the meminfoMon class ;-)
 #
 import curses
 from curses import  A_BOLD,  A_REVERSE, A_NORMAL, wrapper
