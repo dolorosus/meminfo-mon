@@ -1,11 +1,20 @@
 #!/bin/python3
 # -*- coding: utf-8 -*-
 #
+#  bufferwatch.py
+#  project
+#
+#  Created by Dolorosus on {2023-07-11.
+#  Copyright 2023. All rights reserved.
+#
+#  mail@dolorosus.de
+#
 #  shows continously selected values from /proc/meminfo
-#  since globals are considered harmful, they are hidden in the meminfoMon class ;-)
+#
+#  since globals are considered harmful, they are hidden hidden in the meminfoMon class ;-)
 #
 import curses
-from curses import  A_BOLD,  A_REVERSE, A_NORMAL, wrapper
+from curses import A_BOLD, A_REVERSE, A_NORMAL, wrapper
 import locale
 import socket
 
@@ -25,7 +34,7 @@ class meminfoMon(object):
         self.meminfo = {}
         self.count = count
         self.interval = interval
-        self.intervalOld = self.interval
+        self.intervalOld = interval
 
         self.selection = selection
         self.stdscr = stdscr
@@ -43,6 +52,7 @@ class meminfoMon(object):
         #
         # transform input to dict {name:[value,hwm]}
         for line in [l.strip().split() for l in open("/proc/meminfo")]:
+            #
             #
             # HugePages_* comes without unit...
             if len(line) == 3:
@@ -158,20 +168,26 @@ class meminfoMon(object):
                 self.stdscr.addstr(dRow, 0, out, A_BOLD)
             else:
                 self.stdscr.clear()
-                sizeWarn = "Termsize too small!"
                 self.stdscr.addstr(
                     self.scrRows // 2,
-                    self.scrCols // 2 - len(sizeWarn) // 2,
-                    sizeWarn,
-                    A_REVERSE,
+                    0,
+                    f"{'Termsize too small!':^{self.scrCols}}",
+                    A_BOLD,
                 )
 
             self.stdscr.refresh()
-            self.keycheck()
-            for _ in range(int(self.interval) * 4):
-                sleep(0.25)
-                if self.keycheck():
-                    break
+            #
+            # even if interval=0 check for pressed keys
+            #self.keycheck()
+            #
+            # Max. latency for reacting of a pressed key is 0.3 seconds
+            if self.interval:
+                for _ in range(int(self.interval) * 3):
+                    sleep(0.33)
+                    if self.keycheck():
+                        break
+            else:
+                self.keycheck()
 
     def showHelp(self):
         help = {
@@ -365,5 +381,3 @@ if __name__ == "__main__":
     hostname = socket.gethostname()
 
     wrapper(main)
-
-
