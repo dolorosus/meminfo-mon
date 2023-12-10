@@ -313,8 +313,16 @@ class meminfoMon(object):
 
 
 def midstr(str, pos, repl):
-    """replace a part of string with pepl, starting at pos"""
-
+    """replace a part of string with repl, starting at pos
+       never retuns a string longer than the length of 'str'
+    """
+    
+    if not str:
+        return repl
+    
+    if not repl:
+        return str
+    
     rLen = len(repl)
     vLen = len(str)
 
